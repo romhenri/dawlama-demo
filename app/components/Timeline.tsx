@@ -18,6 +18,24 @@ export function Timeline({
 }) {
   const [playing, setPlaying] = useState(false);
 
+  // Local, editable copy of the arrangement. Nothing persists — this is a demo,
+  // so a "reset" button restores the original prop.
+  const [lanes, setLanes] = useState<Track[]>(tracks);
+  const dirty = lanes.length !== tracks.length || lanes.some((t, i) => t.name !== tracks[i]?.name);
+
+  const deleteLane = (index: number) => setLanes((prev) => prev.filter((_, i) => i !== index));
+
+  const moveLane = (index: number, dir: -1 | 1) =>
+    setLanes((prev) => {
+      const next = index + dir;
+      if (next < 0 || next >= prev.length) return prev;
+      const copy = [...prev];
+      [copy[index], copy[next]] = [copy[next], copy[index]];
+      return copy;
+    });
+
+  const resetLanes = () => setLanes(tracks);
+
   // 32 bars of 4 beats at `bpm` → loop duration in seconds (purely cosmetic)
   const loopDur = (BARS * 4 * 60) / bpm;
 
@@ -38,11 +56,20 @@ export function Timeline({
         <span className="tag">4/4</span>
 
         <div className="ml-auto flex items-center gap-3 text-xs text-[var(--text-faint)]">
+          {dirty && (
+            <button
+              onClick={resetLanes}
+              title="Restore original arrangement"
+              className="flex items-center gap-1 rounded-md border border-[var(--border-hi)] px-2 py-1 text-[var(--text-dim)] hover:border-[var(--accent)] hover:text-[var(--text)]"
+            >
+              <Icon name="reset" size={12} /> reset
+            </button>
+          )}
           <span className={`mono ${playing ? "text-[var(--accent)]" : ""}`}>
             {playing ? "● playing" : "○ stopped"}
           </span>
           <span className="hidden sm:inline">·</span>
-          <span className="mono hidden sm:inline">{tracks.length} tracks</span>
+          <span className="mono hidden sm:inline">{lanes.length} tracks</span>
         </div>
       </div>
 
@@ -63,7 +90,7 @@ export function Timeline({
 
       {/* lanes + sweeping playhead */}
       <div className="relative">
-        <TrackLanes tracks={tracks} />
+        <TrackLanes tracks={lanes} onDelete={deleteLane} onMove={moveLane} />
         {/* playhead lives only over the lane area (offset by the 7rem label col) */}
         <div className="pointer-events-none absolute inset-y-0 left-28 right-0">
           <div
@@ -73,6 +100,12 @@ export function Timeline({
             <span className="absolute -left-1 -top-0 h-2 w-2 rounded-full bg-[var(--accent)]" />
           </div>
         </div>
+      </div>
+
+      {/* edit hint */}
+      <div className="flex items-center gap-1.5 border-t border-[var(--border)] bg-[var(--bg-soft)] px-4 py-1.5 text-[11px] text-[var(--text-faint)]">
+        <Icon name="faders" size={12} />
+        Hover a track (faixa) to reorder or delete it. Changes are local — nothing is committed.
       </div>
     </section>
   );

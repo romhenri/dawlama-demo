@@ -1,4 +1,5 @@
 import { BARS, type Track, type RegionKind } from "../data/mock";
+import { Icon } from "./Icon";
 
 function kindStyle(kind: RegionKind | undefined, baseColor: string) {
   if (kind === "added") {
@@ -50,12 +51,18 @@ export function TrackLanes({
   tracks,
   compact = false,
   dimEmpty = false,
+  onDelete,
+  onMove,
 }: {
   tracks: Track[];
   compact?: boolean;
   dimEmpty?: boolean;
+  /** When provided, each lane gets delete/move controls. Omit for read-only views. */
+  onDelete?: (index: number) => void;
+  onMove?: (index: number, dir: -1 | 1) => void;
 }) {
   const rowH = compact ? "h-10" : "h-14";
+  const editable = Boolean(onDelete || onMove);
   return (
     <div className="select-none">
       {tracks.length === 0 && (
@@ -65,13 +72,47 @@ export function TrackLanes({
       )}
       {tracks.map((track, ti) => (
         <div
-          key={track.name + ti}
-          className="flex items-stretch border-b border-[var(--border)] last:border-b-0"
+          key={track.name}
+          className="group/lane flex items-stretch border-b border-[var(--border)] last:border-b-0"
         >
           {/* label column */}
-          <div className="flex w-28 shrink-0 items-center gap-2 border-r border-[var(--border)] bg-[var(--bg-soft)] px-3">
+          <div className="relative flex w-28 shrink-0 items-center gap-2 border-r border-[var(--border)] bg-[var(--bg-soft)] px-3">
             <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: track.color }} />
             <span className="truncate text-xs font-medium text-[var(--text-dim)]">{track.name}</span>
+
+            {editable && (
+              <div className="absolute right-1 flex items-center gap-0.5 rounded-md border border-[var(--border)] bg-[var(--panel-hi)] p-0.5 opacity-0 shadow transition group-hover/lane:opacity-100 focus-within:opacity-100">
+                <button
+                  type="button"
+                  onClick={() => onMove?.(ti, -1)}
+                  disabled={ti === 0}
+                  aria-label={`Move ${track.name} up`}
+                  title="Move up"
+                  className="grid h-5 w-5 place-items-center rounded text-[var(--text-dim)] hover:bg-[var(--panel)] hover:text-[var(--text)] disabled:opacity-30 disabled:hover:bg-transparent"
+                >
+                  <Icon name="up" size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onMove?.(ti, 1)}
+                  disabled={ti === tracks.length - 1}
+                  aria-label={`Move ${track.name} down`}
+                  title="Move down"
+                  className="grid h-5 w-5 place-items-center rounded text-[var(--text-dim)] hover:bg-[var(--panel)] hover:text-[var(--text)] disabled:opacity-30 disabled:hover:bg-transparent"
+                >
+                  <Icon name="down" size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onDelete?.(ti)}
+                  aria-label={`Delete ${track.name}`}
+                  title="Delete track"
+                  className="grid h-5 w-5 place-items-center rounded text-[var(--text-dim)] hover:bg-[var(--panel)] hover:text-[var(--del)]"
+                >
+                  <Icon name="trash" size={13} />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* lane */}

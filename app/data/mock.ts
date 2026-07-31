@@ -291,8 +291,15 @@ export const exploreRepos = [
   },
 ];
 
+/** the light-weight repo shape used by cards (explore grid, starred list) */
+export type ExploreRepo = (typeof exploreRepos)[number];
+
 export function getRepo(slug: string): Repo | undefined {
   return repos.find((repo) => repo.slug === slug);
+}
+
+export function getExploreRepo(slug: string): ExploreRepo | undefined {
+  return exploreRepos.find((repo) => repo.slug === slug);
 }
 
 // ─────────────────────────────────────────────────────────────────────────

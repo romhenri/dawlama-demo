@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { Icon } from "./Icon";
 import { Avatar } from "./Avatar";
+import { StarsNavLink } from "./StarsNavLink";
 
 export function TopNav() {
   return (
@@ -21,6 +22,7 @@ export function TopNav() {
           <Link href="/" className="rounded-md px-3 py-1.5 hover:bg-[var(--panel)] hover:text-[var(--text)]">
             Explore
           </Link>
+          <StarsNavLink />
           <span className="rounded-md px-3 py-1.5 opacity-40">Studio</span>
           <span className="rounded-md px-3 py-1.5 opacity-40">Charts</span>
           <button className="ml-2 rounded-md border border-[var(--border-hi)] bg-[var(--panel-hi)] px-3 py-1.5 text-[var(--text)] hover:border-[var(--accent)]">

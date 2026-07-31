@@ -24,7 +24,11 @@ export type IconName =
   | "users"
   | "commit"
   | "tag"
-  | "pin";
+  | "pin"
+  | "up"
+  | "down"
+  | "trash"
+  | "reset";
 
 const FILLED: IconName[] = ["star", "play", "pause"];
 
@@ -206,6 +210,27 @@ function paths(name: IconName) {
       return (
         <>
           <path d="M9 3h6l-1 6 3 3-5 1v7l-1 1-1-1v-7l-5-1 3-3z" />
+        </>
+      );
+    case "up":
+      return <path d="m6 14 6-6 6 6" />;
+    case "down":
+      return <path d="m6 10 6 6 6-6" />;
+    case "trash":
+      return (
+        <>
+          <path d="M4 7h16" />
+          <path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+          <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" />
+          <line x1="10" y1="11" x2="10" y2="17" />
+          <line x1="14" y1="11" x2="14" y2="17" />
+        </>
+      );
+    case "reset":
+      return (
+        <>
+          <path d="M3 12a9 9 0 1 0 3-6.7" />
+          <path d="M3 4v4h4" />
         </>
       );
   }

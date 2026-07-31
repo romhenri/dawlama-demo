@@ -2,6 +2,7 @@ import Link from "next/link";
 import { type Repo } from "../data/mock";
 import { Icon, type IconName } from "./Icon";
 import { Avatar } from "./Avatar";
+import { StarButton } from "./StarButton";
 
 function Stat({ icon, value, label }: { icon: IconName; value: string | number; label: string }) {
   return (
@@ -31,7 +32,7 @@ export function RepoHeader({ repo }: { repo: Repo }) {
       <p className="mb-3 max-w-2xl text-sm text-[var(--text-dim)]">{repo.description}</p>
 
       <div className="flex flex-wrap items-center gap-2">
-        <Stat icon="star" value={repo.stars.toLocaleString()} label="stars" />
+        <StarButton slug={repo.slug} baseStars={repo.stars} />
         <Stat icon="fork" value={repo.forks} label="forks" />
         <Stat icon="gauge" value={repo.bpm} label="BPM" />
         <Stat icon="note" value={repo.musicalKey} label="key" />
