@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/* ── dawlama theme tokens ────────────────────────────────────────────── */
+:root {
+  --bg: #0a0a0f;
+  --bg-soft: #12121a;
+  --panel: #16161f;
+  --panel-hi: #1d1d29;
+  --border: #26263a;
+  --border-hi: #34344d;
+  --text: #e6e6f0;
+  --text-dim: #9a9ab0;
+  --text-faint: #6b6b85;
+  --accent: #a78bfa;
+  --accent-2: #f472b6;
+  --grid: rgba(255, 255, 255, 0.04);
+  --grid-strong: rgba(255, 255, 255, 0.09);
+  --add: #34d399;
+  --add-bg: rgba(52, 211, 153, 0.14);
+  --del: #fb7185;
+  --del-bg: rgba(251, 113, 133, 0.14);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-image:
+    radial-gradient(60rem 40rem at 80% -10%, rgba(167, 139, 250, 0.08), transparent),
+    radial-gradient(50rem 30rem at 0% 0%, rgba(244, 114, 182, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+.mono {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+}
+
+/* thin custom scrollbars to match the DAW feel */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-hi) transparent;
+}
+*::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-hi);
+  border-radius: 999px;
+}
+
+/* ── timeline playhead ───────────────────────────────────────────────── */
+@keyframes playhead-sweep {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.playhead {
+  animation: playhead-sweep linear infinite;
+  animation-duration: var(--loop-dur, 9s);
+}
+.playhead.paused {
+  animation-play-state: paused;
+}
+
+/* faux waveform shimmer on hover */
+@keyframes region-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.25);
+  }
+}
+
+.region:hover {
+  animation: region-pulse 1.4s ease-in-out infinite;
+}
+
+/* subtle glow utility */
+.glow {
+  box-shadow: 0 0 0 1px var(--border), 0 8px 30px -12px rgba(167, 139, 250, 0.5);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+}
+
+a {
+  color: inherit;
+}
